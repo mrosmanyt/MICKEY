@@ -16,5 +16,6 @@ src-tauri/gen/schemas
 *.msi
 mickey-website.zip
 # Nested sub-projects have their own repos / deploys
-mickey-website/
-admin/
+# (anchored to repo root so src/components/admin etc. are NOT excluded)
+/mickey-website/
+/admin/

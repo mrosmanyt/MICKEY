@@ -30,7 +30,7 @@ interface NovaState {
 let poller: ReturnType<typeof setInterval> | null = null;
 const stop = () => { if (poller) { clearInterval(poller); poller = null; } };
 
-export const useNovaStore = create<NovaState>((set, get) => ({
+export const useNovaStore = create<NovaState>((set) => ({
   open: false,
   phase: "idle",
   style: null,

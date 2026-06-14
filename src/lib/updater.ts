@@ -85,7 +85,7 @@ export async function checkForUpdate(opts?: { auto?: boolean; silent?: boolean }
       return;
     }
 
-    pending = update;
+    pending = update as unknown as typeof pending;
     set({ status: "available", version: update.version, notes: update.body ?? "" });
     notify("info", `MICKEY v${update.version} is available — see Settings → General.`);
 
