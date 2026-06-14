@@ -1,0 +1,8 @@
+{
+  "name": "mickey-media-server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "NOVA — local ffmpeg video-editing sidecar for MICKEY",
+  "scripts": { "start": "node index.js" }
+}

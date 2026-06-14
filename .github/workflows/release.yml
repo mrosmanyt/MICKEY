@@ -1,0 +1,71 @@
+# ============================================================
+#  MICKEY — auto-build desktop installers (Windows + macOS)
+#
+#  Trigger: push a version tag, e.g.
+#      git tag v0.1.0 && git push origin v0.1.0
+#  Result: a GitHub Release is created with:
+#      MICKEY_0.1.0_x64-setup.exe        (Windows)
+#      MICKEY_0.1.0_x64.dmg              (macOS Intel)
+#      MICKEY_0.1.0_aarch64.dmg          (macOS Apple Silicon)
+#  The install.ps1 / install.sh scripts download from releases/latest/download.
+#
+#  NOTE: This workflow must live in the DESKTOP-APP repo (the one that holds
+#  src-tauri/). Free GitHub runners build BOTH OSes — no Mac needed.
+# ============================================================
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch: {} # manual run button in the Actions tab
+
+permissions:
+  contents: write # needed to create the Release
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos-latest      # Apple Silicon (arm64)
+            args: "--target aarch64-apple-darwin"
+          - platform: macos-latest      # Intel
+            args: "--target x86_64-apple-darwin"
+          - platform: windows-latest
+            args: ""
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "./src-tauri -> target"
+
+      - name: Install frontend deps
+        run: npm install
+
+      - name: Build + publish installer
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "MICKEY ${{ github.ref_name }}"
+          releaseBody: "Install: https://mickeyai.site/install"
+          releaseDraft: false
+          prerelease: false
+          args: ${{ matrix.args }}

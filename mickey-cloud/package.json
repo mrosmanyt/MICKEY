@@ -1,0 +1,20 @@
+{
+  "name": "mickey-cloud",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "MICKEY Brain — cloud backend (API + OAuth + workers) for the client portal.",
+  "scripts": {
+    "start": "node src/server.js",
+    "worker": "node src/worker.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "bullmq": "^5.7.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "googleapis": "^140.0.0",
+    "ioredis": "^5.4.1"
+  }
+}

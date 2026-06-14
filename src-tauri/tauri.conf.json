@@ -1,0 +1,70 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "MICKEY",
+  "version": "0.1.0",
+  "identifier": "com.mickey.assistant",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "MICKEY — Personal Intelligent Cyber Assistant",
+        "label": "main",
+        "width": 1500,
+        "height": 940,
+        "minWidth": 1180,
+        "minHeight": 760,
+        "center": true,
+        "resizable": true,
+        "theme": "Dark"
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": ["https://YOUR-DOMAIN.netlify.app/updates/latest.json"],
+      "pubkey": "REPLACE_WITH_PUBLIC_KEY_FROM__npx_tauri_signer_generate"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "createUpdaterArtifacts": true,
+    "icon": ["icons/icon.ico", "icons/icon.icns", "icons/icon.png"],
+    "publisher": "MICKEY",
+    "category": "Productivity",
+    "shortDescription": "MICKEY — Personal Intelligent Cyber Assistant",
+    "longDescription": "MICKEY is a premium desktop AI assistant with 15 specialized agents, voice control, browser automation, vision and a local-first user system.",
+    "resources": {
+      "../playwright-server/index.js": "playwright-server/index.js",
+      "../playwright-server/package.json": "playwright-server/package.json",
+      "../media-server/index.js": "media-server/index.js",
+      "../media-server/package.json": "media-server/package.json",
+      "../db-server/index.js": "db-server/index.js",
+      "../db-server/package.json": "db-server/package.json",
+      "../dist": "dist",
+      "../scripts/whisper_stt.py": "scripts/whisper_stt.py",
+      "installer/install-deps.ps1": "bootstrap/install-deps.ps1"
+    },
+    "windows": {
+      "nsis": {
+        "installerIcon": "icons/icon.ico",
+        "installMode": "perMachine",
+        "languages": ["English"],
+        "displayLanguageSelector": false,
+        "startMenuFolder": "MICKEY",
+        "installerHooks": "installer/hooks.nsh"
+      }
+    },
+    "macOS": {
+      "minimumSystemVersion": "11.0"
+    }
+  }
+}

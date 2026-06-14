@@ -1,0 +1,14 @@
+{
+  "name": "mickey-playwright-server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Local Playwright automation sidecar for MICKEY",
+  "scripts": {
+    "postinstall": "playwright install chromium",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "playwright": "^1.48.0"
+  }
+}

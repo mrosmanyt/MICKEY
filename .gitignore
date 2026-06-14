@@ -1,0 +1,20 @@
+node_modules
+dist
+.env
+.env.local
+src-tauri/target
+src-tauri/gen/schemas
+*.local
+.DS_Store
+
+# Large archives / build bundles — never commit (GitHub 100MB limit)
+*.zip
+*.7z
+*.rar
+*.dmg
+*.exe
+*.msi
+mickey-website.zip
+# Nested sub-projects have their own repos / deploys
+mickey-website/
+admin/
