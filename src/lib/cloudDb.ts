@@ -16,8 +16,12 @@ import type {
   UserRecord, RegistrationInput, ActivityEntry, ActivityType, UsageKind, UsageSummary,
 } from "@/lib/localDb";
 
-const URL = import.meta.env.VITE_SUPABASE_URL;
-const ANON = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Cloud config. Falls back to the live project so EVERY build (even one
+// without a .env / CI env vars) connects to the shared Cloud DB — this is
+// what makes signups from any machine show up in the admin panel. The anon
+// key is a public client key (RLS-protected); safe to ship in the app.
+const URL = import.meta.env.VITE_SUPABASE_URL || "https://gevhtxmsamqvdiypiwbb.supabase.co";
+const ANON = import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdldmh0eG1zYW1xdmRpeXBpd2JiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNjY4MDIsImV4cCI6MjA5Njc0MjgwMn0.bfxqGEJIruNPZfPqf7tn2pF0vkS68IZSKKWdk61Boow";
 const IS_TAURI = typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
 
 export const CLOUD_CONFIGURED = !!URL && !!ANON;
