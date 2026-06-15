@@ -62,6 +62,11 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Bake Supabase cloud config into the build so the INSTALLED app uses
+          # shared Cloud DB (not per-machine local). The anon key is a public
+          # client key (RLS protects data) — safe to embed.
+          VITE_SUPABASE_URL: https://gevhtxmsamqvdiypiwbb.supabase.co
+          VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdldmh0eG1zYW1xdmRpeXBpd2JiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNjY4MDIsImV4cCI6MjA5Njc0MjgwMn0.bfxqGEJIruNPZfPqf7tn2pF0vkS68IZSKKWdk61Boow
         with:
           # Fixed release tag (NOT the branch name) — avoids the "main" tag vs
           # "main" branch collision that breaks `git push`.
