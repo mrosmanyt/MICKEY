@@ -69,3 +69,54 @@ jobs:
           releaseDraft: false
           prerelease: false
           args: ${{ matrix.args }}
+
+  # After all installers are built + uploaded, bundle them into one MICKEY.zip
+  # (Windows .exe/.msi + both Mac .dmg + a README) and attach it to the release.
+  package:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Collect installers + build MICKEY.zip
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          mkdir -p MICKEY
+          cd MICKEY
+          gh release download "${{ github.ref_name }}" --repo "${{ github.repository }}" \
+            --pattern "MICKEY_*_x64-setup.exe" \
+            --pattern "MICKEY_*_x64_en-US.msi" \
+            --pattern "MICKEY_*_aarch64.dmg" \
+            --pattern "MICKEY_*_x64.dmg"
+          cat > README.txt <<'EOF'
+          ===========================================
+            MICKEY — Your Personal Intelligent Cyber Assistant
+          ===========================================
+
+          Apne system ke hisaab se file chunें:
+
+          WINDOWS:
+            -> MICKEY_0.1.0_x64-setup.exe  (recommended)
+            Double-click karें. "Windows protected your PC" aaye to:
+            More info -> Run anyway.
+
+          macOS (Apple Silicon - M1/M2/M3):
+            -> MICKEY_0.1.0_aarch64.dmg
+          macOS (Intel):
+            -> MICKEY_0.1.0_x64.dmg
+            dmg khol kar MICKEY ko Applications mein drag karें.
+            "unidentified developer" aaye to:
+            System Settings -> Privacy & Security -> Open Anyway.
+
+          Install ke baad MICKEY khulegi — sign in karke shuru karें.
+          Help: https://mickeyai.site/install
+          EOF
+          cd ..
+          zip -r MICKEY.zip MICKEY
+          ls -la MICKEY.zip
+      - name: Upload MICKEY.zip to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload "${{ github.ref_name }}" MICKEY.zip --repo "${{ github.repository }}" --clobber

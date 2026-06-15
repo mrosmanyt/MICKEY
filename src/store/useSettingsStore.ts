@@ -80,7 +80,7 @@ export const DEFAULT_SETTINGS: Settings = {
   ttsEngine: "elevenlabs",
   // Enter your own ElevenLabs key in Settings → API (voice).
   elevenKey: "",
-  elevenVoiceId: "21m00Tcm4TlvDq8ikWAM", // "Rachel" — replace with your own
+  elevenVoiceId: "EXAVITQu4vr4xnSDxMaL", // "Bella" — soft, sweet, warm (change in Settings)
   piperVoicePath: "voices/en_US-amy-medium.onnx",
   agentAnnouncements: true,
   uiSounds: true,
